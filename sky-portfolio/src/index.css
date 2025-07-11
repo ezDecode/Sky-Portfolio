@@ -1,0 +1,1323 @@
+@import "tailwindcss";
+
+/* Custom PolySans Font Faces */
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Neutral.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Neutral Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Median.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Median Italic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Bulky.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Bulky Italic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Slim.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PolySans';
+  src: url('./assets/fonts/PolySans Slim Italic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+
+
+
+@theme {
+  /* Color palette based on your design */
+  --color-primary-black: #000000;
+  --color-primary-white: #FFFFFF;
+  --color-accent-gray: #6B7280;
+  --color-gray-light: #F5F5F5;
+  --color-gray-dark: #333333;
+
+  /* Typography - Updated to use PolySans */
+  --font-display: "PolySans", system-ui, sans-serif;
+  --font-body: "PolySans", system-ui, sans-serif;
+  --font-editorial: "PPEditorialNew", serif;
+
+  /* Custom font sizes for your design */
+  --font-size-display-xl: 4rem;
+  --font-size-display-lg: 3rem;
+  --font-size-display-md: 2.25rem;
+
+  /* Line heights */
+  --line-height-display: 0.85;
+  --line-height-tight: 0.9;
+  --line-height-normal: 1.5;
+
+  /* Letter spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-primary-white);
+    color: var(--color-gray-dark);
+    overflow-x: hidden;
+    cursor: auto; /* Restore default cursor */
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Smooth transitions for specific elements only */
+  a, button {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Custom text selection color - Light Green */
+  ::selection {
+    background-color: #86efac; /* Light green */
+    color: #000000; /* Black text for contrast */
+  }
+
+  ::-moz-selection {
+    background-color: #86efac; /* Light green */
+    color: #000000; /* Black text for contrast */
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+}
+
+/* Custom utilities for your design */
+@utility display-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--line-height-display);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+@utility hero-text {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: var(--line-height-display);
+  letter-spacing: var(--letter-spacing-tight);
+  font-optical-sizing: auto;
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  /* Dynamic text rendering without constraints */
+  width: 100%;
+  max-width: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  /* Enhanced character rendering for animations */
+  overflow: visible;
+  padding: 0.1em 0;
+  /* Ensure text is always visible as fallback */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+@utility section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@utility container-custom {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Dynamic layout system for responsive text rendering */
+@utility layout-container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@utility layout-content {
+  width: 100%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@utility layout-text {
+  width: 100%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Navigation container - 600-650px responsive width */
+@utility nav-container {
+  width: 625px; /* Target middle of 600-650px range */
+  min-width: 600px;
+  max-width: 650px;
+}
+
+/* Dynamic hero text container - perfectly centered */
+.hero-text-dynamic {
+  /* Dynamic width based on content */
+  width: fit-content;
+  max-width: 90vw; /* Prevent overflow on any screen */
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  /* Perfect centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* Ensure proper spacing */
+  box-sizing: border-box;
+
+  /* Ensure enough space for both lines */
+  min-height: fit-content;
+}
+
+/* Custom responsive font sizes for 64px target on desktop */
+.hero-text-responsive {
+  /* Mobile: 32px (50% of desktop) */
+  font-size: 2rem;
+}
+
+@media (min-width: 640px) {
+  .hero-text-responsive {
+    /* Tablet: 48px (75% of desktop) */
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-text-responsive {
+    /* Desktop: 64px (target size) */
+    font-size: 4rem;
+  }
+}
+
+/* Hero text two-line layout styles */
+.hero-text-container {
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.hero-line-1,
+.hero-line-2 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap; /* Prevent unwanted line breaks within each line */
+  margin: 0 auto;
+  line-height: 1; /* Tight line height for better spacing */
+  padding: 0.1em 0; /* Small padding for breathing room */
+}
+
+/* Equal visual width for both lines */
+.hero-line-1 {
+  /* Remove letter spacing, keep word spacing and padding for balance */
+  word-spacing: 0.15em;
+  /* Add padding to balance visual weight */
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
+
+.hero-line-2 {
+  /* Tighter letter spacing for second line to reduce its width */
+  letter-spacing: -0.01em;
+  word-spacing: 0.02em;
+  /* Ensure consistent alignment */
+  max-width: fit-content;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments for dynamic centering and visual balance */
+@media (max-width: 640px) {
+  .hero-text-dynamic {
+    max-width: 98vw;
+    padding: 0 0.5rem;
+  }
+
+  .hero-line-1,
+  .hero-line-2 {
+    white-space: nowrap; /* Maintain line structure on mobile */
+  }
+
+  /* Mobile visual balance adjustments */
+  .hero-line-1 {
+    word-spacing: 0.1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .hero-line-2 {
+    letter-spacing: -0.005em;
+    word-spacing: 0.01em;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-text-dynamic {
+    max-width: 90vw;
+    padding: 0 1.5rem;
+  }
+
+  /* Tablet visual balance adjustments */
+  .hero-line-1 {
+    word-spacing: 0.12em;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+  }
+
+  .hero-line-2 {
+    letter-spacing: -0.008em;
+    word-spacing: 0.015em;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero-text-dynamic {
+    max-width: 85vw;
+    padding: 0 2rem;
+  }
+
+  /* Desktop visual balance adjustments */
+  .hero-line-1 {
+    word-spacing: 0.15em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+  }
+
+  .hero-line-2 {
+    letter-spacing: -0.01em;
+    word-spacing: 0.02em;
+  }
+}
+
+/* Perfect centering for hero section */
+#hero {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  position: relative !important;
+  overflow: hidden; /* Prevent any overflow issues */
+}
+
+/* Ensure perfect vertical and horizontal centering */
+@utility hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+@utility text-gradient {
+  background: linear-gradient(135deg, var(--color-accent-gray), #9CA3AF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@utility loading-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Hero text animation styles - optimized for performance */
+.hero-char {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: center bottom;
+  white-space: pre;
+}
+
+/* Preserve spaces during character animation */
+.hero-char:empty::before {
+  content: '\00a0'; /* Non-breaking space */
+}
+
+/* Hero word animation styles - optimized for 60fps performance */
+.hero-word-segment1,
+.hero-word-segment2 {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  transform-origin: center bottom;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+/* Hero text segments for better animation control */
+.hero-text-segment {
+  display: inline;
+  contain: layout style;
+}
+
+/* Ensure italic text uses PPEditorialNew font with perfect rendering */
+.font-editorial {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Enhanced glassmorphism navigation */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-nav:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Work Section Styles */
+.work-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.work-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.work-text-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.work-text-content {
+  font-family: 'PolySans', system-ui, sans-serif;
+  font-weight: 700;
+  color: #000000;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  will-change: transform, opacity;
+}
+
+/* Responsive typography for work section */
+.work-text-content {
+  font-size: 160px; /* Desktop default */
+}
+
+@media (max-width: 1199px) {
+  .work-text-content {
+    font-size: 100px; /* Tablet */
+  }
+}
+
+@media (max-width: 767px) {
+  .work-text-content {
+    font-size: 48px; /* Mobile */
+  }
+
+  .work-text-container {
+    gap: 1rem; /* Reduced gap on mobile */
+  }
+}
+
+/* SVG Elements Styling */
+.svg-element-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 1rem;
+}
+
+.svg-element {
+  will-change: transform;
+  opacity: 0;
+  transform: scale(0.8) rotate(-10deg);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.abstract-pattern,
+.line-drawing,
+.combined-svg,
+.minimal-lines {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Abstract Pattern Animations */
+.rotating-group {
+  transform-origin: center;
+  animation: subtleRotate 20s linear infinite;
+}
+
+.pattern-circle {
+  transform-origin: center;
+  animation: pulseScale 4s ease-in-out infinite;
+}
+
+.pattern-rect {
+  transform-origin: center;
+  animation: counterRotate 15s linear infinite;
+}
+
+.pattern-triangle {
+  transform-origin: center;
+  animation: floatUpDown 6s ease-in-out infinite;
+}
+
+.inner-circle {
+  transform-origin: center;
+  animation: pulseOpacity 3s ease-in-out infinite;
+}
+
+/* Line Drawing Animations */
+.line-path-1,
+.line-path-2,
+.line-path-3 {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 3s ease-in-out infinite;
+}
+
+.line-path-2 {
+  animation-delay: 0.5s;
+}
+
+.line-path-3 {
+  animation-delay: 1s;
+}
+
+.line-dot {
+  transform-origin: center;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+/* Combined SVG Animations */
+.flowing-line {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: flowingDraw 4s ease-in-out infinite;
+}
+
+.floating-circle-1,
+.floating-circle-2 {
+  transform-origin: center;
+  animation: floatCircle 5s ease-in-out infinite;
+}
+
+.floating-circle-2 {
+  animation-delay: 1s;
+}
+
+.intersection-rect {
+  transform-origin: center;
+  animation: rotateRect 8s linear infinite;
+}
+
+/* Minimal Lines Animations */
+.curve-1,
+.curve-2 {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  animation: drawCurve 2.5s ease-in-out infinite;
+}
+
+.curve-2 {
+  animation-delay: 0.3s;
+}
+
+.vertical-line {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: drawVertical 1.5s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+/* Keyframe Animations */
+@keyframes subtleRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes counterRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes drawLine {
+  0% { stroke-dashoffset: 200; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -200; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes flowingDraw {
+  0% { stroke-dashoffset: 300; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -300; }
+}
+
+@keyframes floatCircle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.1); }
+}
+
+@keyframes rotateRect {
+  from { transform: rotate(30deg); }
+  to { transform: rotate(390deg); }
+}
+
+@keyframes drawCurve {
+  0% { stroke-dashoffset: 150; }
+  60% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -150; }
+}
+
+@keyframes drawVertical {
+  0% { stroke-dashoffset: 30; }
+  70% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -30; }
+}
+
+/* Responsive SVG sizing */
+@media (max-width: 1199px) {
+  .svg-element-container {
+    margin: 0 0.5rem;
+  }
+
+  .abstract-pattern,
+  .line-drawing,
+  .combined-svg,
+  .minimal-lines {
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 767px) {
+  .svg-element-container {
+    margin: 0 0.25rem;
+  }
+
+  .abstract-pattern,
+  .line-drawing,
+  .combined-svg,
+  .minimal-lines {
+    transform: scale(0.6);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .work-section * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .svg-element {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .rotating-group,
+  .pattern-circle,
+  .pattern-rect,
+  .pattern-triangle,
+  .inner-circle,
+  .line-path-1,
+  .line-path-2,
+  .line-path-3,
+  .line-dot,
+  .flowing-line,
+  .floating-circle-1,
+  .floating-circle-2,
+  .intersection-rect,
+  .curve-1,
+  .curve-2,
+  .vertical-line {
+    animation: none !important;
+  }
+}
+
+/* Performance Optimizations */
+.work-section {
+  contain: layout style paint;
+  will-change: scroll-position;
+}
+
+.work-text-container {
+  contain: layout style;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.work-text-word {
+  contain: layout style;
+  transform: translate3d(0, 0, 0);
+}
+
+.svg-element {
+  contain: layout style paint;
+  transform: translate3d(0, 0, 0);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .abstract-pattern,
+  .line-drawing,
+  .combined-svg,
+  .minimal-lines {
+    filter: contrast(2) brightness(1.2);
+  }
+
+  .work-text-content {
+    font-weight: 800;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Focus management for accessibility */
+.work-section:focus-within {
+  outline: 2px solid #86efac;
+  outline-offset: 4px;
+}
+
+/* Print styles */
+@media print {
+  .work-section {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .work-text-container {
+    transform: none !important;
+    width: 100% !important;
+    white-space: normal !important;
+    flex-wrap: wrap !important;
+  }
+
+  .svg-element-container {
+    display: none !important;
+  }
+}
+
+/* Ensure backdrop blur works across browsers */
+@supports (backdrop-filter: blur(20px)) {
+  .backdrop-blur-xl {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
+
+/* Sidebar styles */
+.sidebar-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Prevent body scroll when sidebar is open */
+.sidebar-open {
+  overflow: hidden;
+}
+
+/* Smooth sidebar transitions */
+.sidebar-enter {
+  transform: translateX(100%);
+}
+
+.sidebar-enter-active {
+  transform: translateX(0);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.sidebar-exit {
+  transform: translateX(0);
+}
+
+.sidebar-exit-active {
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Loading screen specific styles - optimized for butter-smooth performance */
+.loading-char {
+  display: inline-block;
+  will-change: opacity;
+  /* Hardware acceleration for 60fps performance */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Optimize font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent layout shifts during animation */
+  contain: layout style paint;
+}
+
+/* Enhanced Hero character animation - optimized for complete character rendering */
+.hero-char-optimized {
+  display: inline-block;
+  will-change: opacity, transform, filter;
+  /* Enhanced hardware acceleration for 60fps performance */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Ensure complete character rendering - prevent clipping */
+  overflow: visible !important;
+  line-height: 0.85;
+  vertical-align: baseline;
+  /* Prevent character cutting for descenders and ascenders */
+  padding: 0.05em 0;
+  margin: 0;
+  /* Enhanced font rendering for crisp characters */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Prevent layout shifts and ensure visibility */
+  contain: layout style;
+  /* Ensure no masking or clipping */
+  clip-path: none !important;
+  mask-image: none !important;
+  /* Force proper baseline alignment for all characters */
+  position: relative;
+  top: 0;
+  bottom: 0;
+}
+
+/* SplitType character and word containers - prevent descender clipping */
+.split-char,
+.split-word,
+.split-line {
+  /* Ensure complete character rendering without clipping */
+  overflow: visible !important;
+  /* Proper vertical alignment for descenders */
+  vertical-align: baseline;
+  /* Adequate padding for ascenders and descenders */
+  padding: 0.1em 0;
+  /* Prevent any container clipping */
+  clip-path: none !important;
+  mask-image: none !important;
+  /* Maintain proper line height while preventing clipping */
+  line-height: inherit;
+  /* Ensure proper baseline alignment */
+  position: relative;
+  /* Hardware acceleration for smooth animations */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Specific styles for character splitting to prevent clipping */
+span[class*="char"] {
+  overflow: visible !important;
+  vertical-align: baseline;
+  padding: 0.1em 0;
+  line-height: inherit;
+  position: relative;
+}
+
+/* Specific styles for word splitting to prevent clipping */
+span[class*="word"] {
+  overflow: visible !important;
+  vertical-align: baseline;
+  padding: 0.05em 0;
+  line-height: inherit;
+  position: relative;
+}
+
+/* Specific styles for line splitting to prevent clipping */
+span[class*="line"] {
+  overflow: visible !important;
+  vertical-align: baseline;
+  padding: 0.1em 0;
+  line-height: inherit;
+  position: relative;
+  display: block;
+}
+
+/* Global fix for any SplitType generated elements */
+[data-splitting] {
+  overflow: visible !important;
+}
+
+[data-splitting] * {
+  overflow: visible !important;
+  vertical-align: baseline;
+  line-height: inherit;
+}
+
+/* Ensure AnimatedText containers don't clip */
+.animated-text-container {
+  overflow: visible !important;
+  padding: 0.1em 0;
+}
+
+/* Fix for tight line heights with descenders */
+.tight-line-height {
+  padding-top: 0.15em;
+  padding-bottom: 0.15em;
+}
+
+/* Utility class for preventing character clipping */
+.no-char-clip {
+  overflow: visible !important;
+  padding: 0.1em 0;
+}
+
+.no-char-clip * {
+  overflow: visible !important;
+  vertical-align: baseline;
+  line-height: inherit;
+}
+
+/* Ensure smooth animations */
+.loading-container {
+  will-change: opacity, transform;
+}
+
+/* Free text animation alternatives */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Text animation utility classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-typewriter {
+  overflow: hidden;
+  border-right: 2px solid #333;
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
+}
+
+/* Image capsule specific styles - emoji-like inline integration */
+.image-capsule {
+  /* Perfect alignment with text top for better positioning */
+  vertical-align: text-top;
+  /* Inline display like text characters */
+  display: inline;
+  /* Transparent background - no visible background */
+  background: transparent !important;
+  /* No borders or outlines */
+  border: none !important;
+  outline: none !important;
+  /* Prevent layout shifts during loading */
+  contain: layout style paint;
+  /* Optimize for animations */
+  will-change: transform, opacity;
+  /* Ensure no line height disruption */
+  line-height: 1;
+  /* Perfect text integration */
+  font-size: inherit;
+  /* Prevent any margin collapse */
+  margin-top: 0;
+  margin-bottom: 0;
+  /* No padding interference */
+  padding: 0;
+  /* Ensure inline behavior */
+  white-space: nowrap;
+}
+
+.image-capsule img {
+  /* Prevent image dragging */
+  user-select: none;
+  -webkit-user-drag: none;
+  /* Optimize rendering */
+  image-rendering: optimizeQuality;
+  -webkit-image-rendering: optimizeQuality;
+  /* Perfect middle alignment with text - use text-top for better alignment */
+  vertical-align: text-top;
+  /* Ensure inline display */
+  display: inline;
+  /* Transparent background - preserve image transparency */
+  background: transparent !important;
+  /* No borders or styling */
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  /* No forced styling - preserve natural image appearance */
+  border-radius: 0 !important;
+  /* Natural object fit - maintain aspect ratio */
+  object-fit: contain;
+  /* Hardware acceleration for smooth performance */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Responsive image capsule sizing for reduced font size layout */
+@media (max-width: 640px) {
+  .image-capsule {
+    /* No margins - inline with text */
+    margin: 0;
+    /* Ensure 1em height scales with 32px font size */
+    height: 1em;
+  }
+
+  .hero-text-container {
+    /* Ensure proper spacing on mobile */
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .image-capsule {
+    /* No margins - inline with text */
+    margin: 0;
+    /* Ensure 1em height scales with 48px font size */
+    height: 1em;
+  }
+
+  .hero-text-container {
+    /* Optimal spacing for tablet */
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 1025px) {
+  .image-capsule {
+    /* No margins - inline with text */
+    margin: 0;
+    /* Ensure 1em height scales with 64px font size */
+    height: 1em;
+  }
+
+  .hero-text-container {
+    /* Perfect spacing for desktop */
+    line-height: 0.9;
+  }
+}
+
+/* Staggered animation delays */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+.animate-delay-600 { animation-delay: 0.6s; }
+.animate-delay-700 { animation-delay: 0.7s; }
+.animate-delay-800 { animation-delay: 0.8s; }
+
+/* Word-by-word reveal animation */
+.word-reveal {
+  opacity: 0;
+  transform: translateY(100%);
+  display: inline-block;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Character-by-character reveal */
+.char-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  display: inline-block;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .loading-char,
+  .word-reveal,
+  .char-reveal,
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .animate-typewriter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Responsive utilities - Dynamic padding for text rendering */
+@media (max-width: 640px) {
+  .display-text {
+    font-size: 3rem;
+  }
+
+  .section-padding {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Mobile padding - minimal for maximum text space */
+  .layout-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Mobile responsive containers */
+  .nav-container {
+    width: 90vw;
+    min-width: 320px;
+    max-width: 600px;
+  }
+
+  .hero-container {
+    width: 95vw;
+    min-width: 280px;
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 640px) {
+  .layout-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Tablet responsive containers */
+  .nav-container {
+    width: 600px;
+    min-width: 600px;
+    max-width: 625px;
+  }
+
+  .hero-container {
+    width: 960px;
+    min-width: 960px;
+    max-width: 990px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Desktop responsive containers */
+  .nav-container {
+    width: 625px;
+    min-width: 600px;
+    max-width: 650px;
+  }
+
+  .hero-container {
+    width: 990px;
+    min-width: 960px;
+    max-width: 1020px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  /* Large desktop responsive containers - maintain target ranges */
+  .nav-container {
+    width: 625px;
+    min-width: 600px;
+    max-width: 650px;
+  }
+
+  .hero-container {
+    width: 990px;
+    min-width: 960px;
+    max-width: 1020px;
+  }
+}
+
+/* HeroUI Navbar Custom Styles */
+[data-slot="base"] {
+  background: transparent !important;
+}
+
+[data-slot="wrapper"] {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure navbar background is completely transparent */
+.navbar-transparent {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.navbar-transparent::before {
+  display: none !important;
+}
