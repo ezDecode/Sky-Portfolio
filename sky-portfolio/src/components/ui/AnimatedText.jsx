@@ -32,6 +32,7 @@ const AnimatedText = ({
     else if (splitBy === "lines") elements = split.lines || []
     else elements = split.words || []
 
+    
     if (elements.length === 0) return
 
     // Set initial state with hardware acceleration

@@ -24,16 +24,25 @@ const MagneticButton = ({
       return
     }
 
-    // Initialize GSAP quickSetters for performance (using percentage for better scaling)
+    // Initialize GSAP quickSetters for performance
     xSetRef.current = gsap.quickSetter(flair, "xPercent")
     ySetRef.current = gsap.quickSetter(flair, "yPercent")
 
-    // Set initial state
+    // Set initial state with hardware acceleration
     gsap.set(flair, {
       scale: 0,
       xPercent: 0,
       yPercent: 0,
-      transformOrigin: "0 0"
+      transformOrigin: "center center",
+      force3D: true,
+      willChange: "transform"
+    })
+
+    // Set initial text state
+    gsap.set(text, {
+      color: "var(--color-surface-white)",
+      force3D: true,
+      willChange: "color"
     })
 
     // Calculate mouse position as percentage within button bounds
@@ -59,80 +68,118 @@ const MagneticButton = ({
     const handleMouseEnter = (e) => {
       const { x, y } = getXY(e)
 
+      // Kill any existing animations for smooth transitions
+      gsap.killTweensOf([flair, text])
+
       // Set initial position immediately using quickSetters
       xSetRef.current(x)
       ySetRef.current(y)
 
-      // Animate scale in with slower, more elegant timing (0.6s)
-      gsap.to(flair, {
+      // Create timeline for coordinated animations
+      const tl = gsap.timeline()
+
+      // Animate flair scale in with optimized easing
+      tl.to(flair, {
         scale: 1,
         duration: 0.6,
-        ease: "power2.out"
+        ease: "back.out(1.2)",
+        force3D: true
       })
 
-      // Change text color on hover with smooth transition
-      gsap.to(text, {
+      // Animate text color change simultaneously
+      tl.to(text, {
         color: "var(--color-just-black)",
         duration: 0.6,
-        ease: "cubic-bezier(0.77, 0, 0.175, 1)"
-      })
+        ease: "power2.out",
+        force3D: true
+      }, 0) // Start at the same time as flair animation
     }
 
     const handleMouseLeave = (e) => {
       const { x, y } = getXY(e)
 
-      // Calculate exit direction with offset (matching reference implementation)
-      const exitX = x > 90 ? x + 20 : x < 10 ? x - 20 : x
-      const exitY = y > 90 ? y + 20 : y < 10 ? y - 20 : y
+      // Calculate exit direction with enhanced offset for smoother exit
+      const exitX = x > 85 ? x + 25 : x < 15 ? x - 25 : x
+      const exitY = y > 85 ? y + 25 : y < 15 ? y - 25 : y
 
-      // Kill any existing tweens and animate out with slower timing (0.5s)
-      gsap.killTweensOf(flair)
-      gsap.to(flair, {
+      // Kill any existing animations
+      gsap.killTweensOf([flair, text])
+
+      // Create timeline for coordinated exit animations
+      const tl = gsap.timeline()
+
+      // Animate flair out with position and scale change
+      tl.to(flair, {
         xPercent: exitX,
         yPercent: exitY,
         scale: 0,
         duration: 0.5,
-        ease: "power2.out"
+        ease: "power2.in",
+        force3D: true
       })
 
-      // Reset text color with smooth transition
-      gsap.to(text, {
+      // Animate text color back simultaneously
+      tl.to(text, {
         color: "var(--color-surface-white)",
         duration: 0.5,
-        ease: "cubic-bezier(0.77, 0, 0.175, 1)"
-      })
+        ease: "power2.out",
+        force3D: true
+      }, 0) // Start at the same time as flair animation
     }
 
     const handleMouseMove = (e) => {
       const { x, y } = getXY(e)
 
-      // Smooth movement with GSAP animation (matching reference)
-      gsap.to(flair, {
-        xPercent: x,
-        yPercent: y,
-        duration: 0.4,
-        ease: "power2"
-      })
+      // Only animate position if flair is visible (scale > 0)
+      if (gsap.getProperty(flair, "scale") > 0) {
+        // Use quickSetters for immediate response, then smooth with animation
+        gsap.to(flair, {
+          xPercent: x,
+          yPercent: y,
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto", // Prevent animation conflicts
+          force3D: true
+        })
+      }
     }
 
-    // Add event listeners
-    button.addEventListener("mouseenter", handleMouseEnter)
-    button.addEventListener("mouseleave", handleMouseLeave)
-    button.addEventListener("mousemove", handleMouseMove)
+    // Add event listeners with passive option for better performance
+    button.addEventListener("mouseenter", handleMouseEnter, { passive: true })
+    button.addEventListener("mouseleave", handleMouseLeave, { passive: true })
+    button.addEventListener("mousemove", handleMouseMove, { passive: true })
 
-    // Cleanup function
+    // Cleanup function with enhanced cleanup
     return () => {
+      // Remove event listeners
       if (button) {
         button.removeEventListener("mouseenter", handleMouseEnter)
         button.removeEventListener("mouseleave", handleMouseLeave)
         button.removeEventListener("mousemove", handleMouseMove)
       }
+
+      // Kill all animations and reset states
       if (flair) {
         gsap.killTweensOf(flair)
+        gsap.set(flair, {
+          scale: 0,
+          xPercent: 0,
+          yPercent: 0,
+          clearProps: "willChange"
+        })
       }
+
       if (text) {
         gsap.killTweensOf(text)
+        gsap.set(text, {
+          color: "var(--color-surface-white)",
+          clearProps: "willChange"
+        })
       }
+
+      // Clear quickSetter references
+      xSetRef.current = null
+      ySetRef.current = null
     }
   }, [])
 
@@ -171,26 +218,29 @@ const MagneticButton = ({
       style={cssVars}
       {...props}
     >
-      {/* Magnetic flair effect - matches reference implementation */}
+      {/* Magnetic flair effect - optimized for performance */}
       <span
         ref={flairRef}
-        className="absolute inset-0 pointer-events-none scale-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           willChange: 'transform',
-          transformOrigin: '0 0'
+          transformOrigin: 'center center',
+          backfaceVisibility: 'hidden',
+          perspective: '1000px'
         }}
       >
         <span
           className="absolute block w-[170%] aspect-square bg-white rounded-full"
           style={{
-            top: 0,
-            left: 0,
-            transform: 'translate(-50%, -50%)'
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backfaceVisibility: 'hidden'
           }}
         />
       </span>
 
-      {/* Button label with smooth color transitions */}
+      {/* Button label with optimized color transitions */}
       <span
         ref={textRef}
         className="relative z-10 text-center"
@@ -198,7 +248,10 @@ const MagneticButton = ({
           color: 'var(--color-surface-white)',
           letterSpacing: '-0.01em',
           lineHeight: '1.05',
-          willChange: 'color'
+          willChange: 'color',
+          backfaceVisibility: 'hidden',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale'
         }}
       >
         {children}
