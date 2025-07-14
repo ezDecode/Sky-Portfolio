@@ -11,15 +11,15 @@ export default {
     extend: {
       colors: {
         primary: {
-          black: '#000000',
-          white: '#FFFFFF',
+          black: '#0a0a0a',
+          white: '#ffffff',
           gray: {
-            light: '#F5F5F5',
-            dark: '#333333',
+            light: '#1a1a1a',
+            dark: '#262626',
           }
         },
-        'light-purple': '#dfdcff',
-        'cream': '#FFFCE1',
+        'dark-purple': '#1a1a2e',
+        'dark-gray': '#0a0a0a',
       },
       fontFamily: {
         sans: ['PolySans', 'system-ui', 'sans-serif'],
@@ -80,6 +80,12 @@ export default {
           overflow: 'visible',
           clip: 'auto',
           'white-space': 'normal',
+        },
+        '.gpu-accelerated': {
+          'transform': 'translateZ(0)',
+          'backface-visibility': 'hidden',
+          'perspective': '1000px',
+          'will-change': 'transform, opacity',
         }
       })
     }

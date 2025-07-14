@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react'
+/**
+ * WorkSection.jsx - Clean, Simple Implementation
+ * 
+ * A horizontal scrolling text section with highlighted terms
+ */
+
+import { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -6,63 +12,106 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
+// Simple configuration
+const TEXT_CONTENT = "My work lives at the intersection of human-centered design and robust, full-stack engineering."
+const HIGHLIGHTED_TERMS = ['intersection', 'human-centered', 'engineering']
+
+// Highlighted word styles
+const HIGHLIGHT_STYLES = {
+  intersection: {
+    background: 'linear-gradient(135deg, #86efac 0%, #22c55e 100%)',
+    color: '#000000',
+    border: '2px solid #059669',
+    boxShadow: '0 4px 12px rgba(34, 197, 94, 0.4)',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    padding: '0.5rem 1rem',
+    borderRadius: '8px',
+    opacity: 1
+  },
+  'human-centered': {
+    background: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
+    color: '#000000',
+    border: '2px solid #059669',
+    boxShadow: '0 4px 12px rgba(132, 204, 22, 0.4)',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    padding: '0.5rem 1rem',
+    borderRadius: '8px',
+    opacity: 1
+  },
+  engineering: {
+    background: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #ff6b35 100%)',
+    color: '#000000',
+    border: '2px solid #e55039',
+    boxShadow: '0 4px 12px rgba(255, 107, 107, 0.4)',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    padding: '0.5rem 1rem',
+    borderRadius: '8px',
+    opacity: 1
+  }
+}
+
 const WorkSection = () => {
   const sectionRef = useRef(null)
   const containerRef = useRef(null)
   const textContainerRef = useRef(null)
   const [fontsLoaded, setFontsLoaded] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
 
-  // Check for reduced motion preference and load fonts
+  // Load fonts
   useEffect(() => {
-    // Check for reduced motion preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mediaQuery.matches)
-
-    const handleMotionChange = (e) => setReducedMotion(e.matches)
-    mediaQuery.addEventListener('change', handleMotionChange)
-
-    // Check fonts
-    const checkFonts = async () => {
+    const loadFonts = async () => {
       try {
         await document.fonts.ready
         setFontsLoaded(true)
       } catch (error) {
-        // Fallback if font loading detection fails
-        setTimeout(() => setFontsLoaded(true), 100)
+        console.warn('Font loading error:', error)
+        setFontsLoaded(true) // Fallback
       }
     }
-    checkFonts()
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMotionChange)
-    }
+    loadFonts()
   }, [])
 
-  // Enhanced horizontal scroll animation setup
+  // Process text into words
+  const processText = () => {
+    const words = TEXT_CONTENT.split(' ')
+    return words.map((word, index) => {
+      const cleanWord = word.toLowerCase().replace(/[.,!?;:]$/, '')
+      const isHighlighted = HIGHLIGHTED_TERMS.includes(cleanWord)
+      
+      return {
+        id: `word-${index}`,
+        text: word,
+        cleanText: cleanWord,
+        index,
+        isHighlighted
+      }
+    })
+  }
+
+  const words = processText()
+
+  // GSAP Animation
   useGSAP(() => {
-    if (!sectionRef.current || !containerRef.current || !textContainerRef.current || !fontsLoaded) return
+    if (!sectionRef.current || !textContainerRef.current || !fontsLoaded) {
+      return
+    }
 
     const section = sectionRef.current
     const textContainer = textContainerRef.current
 
-    // Set initial transform with hardware acceleration
-    gsap.set(textContainer, {
-      force3D: true,
-      willChange: 'transform'
+    // Clear existing ScrollTriggers
+    ScrollTrigger.getAll().forEach(trigger => {
+      if (trigger.trigger === section) {
+        trigger.kill()
+      }
     })
 
-    // Skip complex animations if reduced motion is preferred
-    if (reducedMotion) {
-      gsap.set(textContainer, { x: 0 })
-      return
-    }
+    // Calculate scroll distance
+    const containerWidth = textContainer.scrollWidth
+    const viewportWidth = window.innerWidth
+    const scrollDistance = Math.max(containerWidth - viewportWidth + 200, viewportWidth)
 
-    // Calculate scroll distance based on content width
-    const scrollDistance = textContainer.scrollWidth - window.innerWidth
-
-    // Set up horizontal scroll animation with performance optimizations
-    const scrollAnimation = gsap.to(textContainer, {
+    // Create horizontal scroll animation
+    gsap.to(textContainer, {
       x: -scrollDistance,
       ease: 'none',
       scrollTrigger: {
@@ -76,401 +125,96 @@ const WorkSection = () => {
       }
     })
 
-    // Handle window resize for responsive behavior
-    let resizeTimeout
-    const handleResize = () => {
-      clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(() => {
-        ScrollTrigger.refresh()
-      }, 250)
-    }
+    // Animate words in
+    const wordElements = textContainer.querySelectorAll('.work-word')
+    gsap.fromTo(wordElements, 
+      {
+        opacity: 0,
+        y: 30
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.05,
+        delay: 0.5,
+        ease: 'power2.out'
+      }
+    )
 
-    window.addEventListener('resize', handleResize)
-
-    // Simplified word reveal animation (only if not reduced motion)
-    if (!reducedMotion) {
-      // Use a timeout to ensure elements are rendered
-      setTimeout(() => {
-        const wordElements = textContainer.querySelectorAll('.work-text-word')
-
-        wordElements.forEach((word) => {
-          gsap.set(word, {
-            opacity: 0.3,
-            scale: 0.9,
-            force3D: true
-          })
-
-          // Create individual scroll trigger for each word
-          ScrollTrigger.create({
-            trigger: word,
-            start: 'left 80%',
-            end: 'right 20%',
-            horizontal: true,
-            containerAnimation: scrollAnimation,
-            onEnter: () => {
-              gsap.to(word, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onLeave: () => {
-              gsap.to(word, {
-                opacity: 0.3,
-                scale: 0.9,
-                duration: 0.4,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onEnterBack: () => {
-              gsap.to(word, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onLeaveBack: () => {
-              gsap.to(word, {
-                opacity: 0.3,
-                scale: 0.9,
-                duration: 0.4,
-                ease: 'power2.out',
-                force3D: true
-              })
-            }
-          })
-        })
-      }, 100)
-    }
-
-    // Simplified SVG animations (only if not reduced motion)
-    if (!reducedMotion) {
-      setTimeout(() => {
-        const svgElements = textContainer.querySelectorAll('.svg-element')
-
-        svgElements.forEach((svg) => {
-          // Set initial state for SVG elements
-          gsap.set(svg, {
-            opacity: 0,
-            scale: 0.8,
-            force3D: true
-          })
-
-          // Create simple scroll trigger for SVG entrance
-          ScrollTrigger.create({
-            trigger: svg,
-            start: 'left 90%',
-            end: 'right 10%',
-            horizontal: true,
-            containerAnimation: scrollAnimation,
-            onEnter: () => {
-              gsap.to(svg, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onLeave: () => {
-              gsap.to(svg, {
-                opacity: 0.3,
-                scale: 0.8,
-                duration: 0.4,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onEnterBack: () => {
-              gsap.to(svg, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.6,
-                ease: 'power2.out',
-                force3D: true
-              })
-            },
-            onLeaveBack: () => {
-              gsap.to(svg, {
-                opacity: 0,
-                scale: 0.8,
-                duration: 0.4,
-                ease: 'power2.out',
-                force3D: true
-              })
-            }
-          })
-        })
-      }, 200)
-    }
-
-    // Cleanup function
-    return () => {
-      if (scrollAnimation) scrollAnimation.kill()
-      window.removeEventListener('resize', handleResize)
-      clearTimeout(resizeTimeout)
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-    }
-  }, [fontsLoaded, reducedMotion])
-
-  // Text content split into words for individual animation
-  const textContent = "My work lives at the intersection of human-centered design and robust, full-stack engineering."
-  const words = textContent.split(' ')
+  }, [fontsLoaded])
 
   return (
     <section
-      id="work"
       ref={sectionRef}
-      className="work-section relative bg-white overflow-hidden"
+      className="work-section"
       style={{
         height: '100vh',
-        willChange: 'transform'
+        backgroundColor: '#0a0a0a',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
       <div
         ref={containerRef}
-        className="work-container relative w-full h-full flex items-center"
+        className="work-container"
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center'
+        }}
       >
-        {/* Horizontal scrolling text container */}
         <div
           ref={textContainerRef}
-          className="work-text-container flex items-center gap-8 whitespace-nowrap"
+          className="work-text-container"
           style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2rem',
+            whiteSpace: 'nowrap',
             width: 'max-content',
-            willChange: 'transform',
             paddingLeft: '10vw',
             paddingRight: '10vw',
-            minWidth: '300vw', // Ensure 3x viewport width minimum
-            transform: 'translate3d(0, 0, 0)', // Hardware acceleration
-            backfaceVisibility: 'hidden' // Performance optimization
+            minWidth: '400vw', // Ensure enough width
+            fontFamily: 'PolySans, system-ui, sans-serif',
+            fontSize: '160px',
+            fontWeight: '700',
+            lineHeight: '0.9',
+            letterSpacing: '-0.02em',
+            color: '#ffffff',
+            opacity: 1
           }}
         >
-          {fontsLoaded && words.map((word, index) => (
-            <React.Fragment key={index}>
-              {/* Simplified text word */}
+          {fontsLoaded && words.map((wordData) => {
+            const isHighlighted = wordData.isHighlighted
+            const highlightStyle = isHighlighted ? HIGHLIGHT_STYLES[wordData.cleanText] : {}
+            
+            return (
               <span
-                className="work-text-word work-text-content"
-                data-word-index={index}
+                key={wordData.id}
+                className={`work-word ${isHighlighted ? 'highlighted' : ''}`}
                 style={{
-                  willChange: 'transform, opacity',
-                  transform: 'translate3d(0, 0, 0)',
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  marginRight: '0.5rem',
+                  color: isHighlighted ? highlightStyle.color : '#ffffff',
+                  opacity: 1,
+                  ...highlightStyle
                 }}
               >
-                {word}
+                {wordData.text}
               </span>
-
-              {/* Enhanced SVG elements between specific words */}
-              {(index === 2 || index === 7 || index === 12 || index === 16) && (
-                <div className="svg-element-container" data-svg-index={index}>
-                  {/* Abstract Pattern SVG (Option C) - Rotating geometric shapes */}
-                  {index === 2 && (
-                    <svg
-                      width="140"
-                      height="140"
-                      viewBox="0 0 140 140"
-                      className="abstract-pattern svg-element"
-                      style={{ willChange: 'transform' }}
-                    >
-                      <g className="rotating-group">
-                        <circle
-                          cx="70"
-                          cy="70"
-                          r="35"
-                          fill="none"
-                          stroke="#000"
-                          strokeWidth="2"
-                          className="pattern-circle"
-                          opacity="0.8"
-                        />
-                        <rect
-                          x="52.5"
-                          y="52.5"
-                          width="35"
-                          height="35"
-                          fill="none"
-                          stroke="#000"
-                          strokeWidth="2"
-                          className="pattern-rect"
-                          opacity="0.6"
-                          transform="rotate(45 70 70)"
-                        />
-                        <polygon
-                          points="70,35 95,95 45,95"
-                          fill="none"
-                          stroke="#000"
-                          strokeWidth="2"
-                          className="pattern-triangle"
-                          opacity="0.7"
-                        />
-                        <circle
-                          cx="70"
-                          cy="70"
-                          r="15"
-                          fill="none"
-                          stroke="#000"
-                          strokeWidth="1"
-                          className="inner-circle"
-                          opacity="0.5"
-                        />
-                      </g>
-                    </svg>
-                  )}
-
-                  {/* Line Drawing SVG (Option B) - Flowing organic lines */}
-                  {index === 7 && (
-                    <svg
-                      width="120"
-                      height="90"
-                      viewBox="0 0 120 90"
-                      className="line-drawing svg-element"
-                      style={{ willChange: 'transform' }}
-                    >
-                      <path
-                        d="M10,45 Q30,15 50,45 Q70,75 90,45 Q110,15 120,45"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        className="line-path-1"
-                        opacity="0.8"
-                      />
-                      <path
-                        d="M15,65 Q35,35 55,65 Q75,35 95,65"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        className="line-path-2"
-                        opacity="0.6"
-                      />
-                      <path
-                        d="M25,25 L95,25"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        className="line-path-3"
-                        opacity="0.4"
-                      />
-                      <circle
-                        cx="60"
-                        cy="45"
-                        r="4"
-                        fill="#000"
-                        className="line-dot"
-                        opacity="0.7"
-                      />
-                    </svg>
-                  )}
-
-                  {/* Combined Abstract + Line SVG - Complex intersection */}
-                  {index === 12 && (
-                    <svg
-                      width="160"
-                      height="110"
-                      viewBox="0 0 160 110"
-                      className="combined-svg svg-element"
-                      style={{ willChange: 'transform' }}
-                    >
-                      <path
-                        d="M20,55 Q40,25 60,55 Q80,85 100,55 Q120,25 140,55"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        className="flowing-line"
-                        opacity="0.8"
-                      />
-                      <circle
-                        cx="40"
-                        cy="40"
-                        r="12"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        className="floating-circle-1"
-                        opacity="0.6"
-                      />
-                      <circle
-                        cx="120"
-                        cy="70"
-                        r="8"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        className="floating-circle-2"
-                        opacity="0.7"
-                      />
-                      <rect
-                        x="75"
-                        y="45"
-                        width="20"
-                        height="20"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="1"
-                        className="intersection-rect"
-                        opacity="0.5"
-                        transform="rotate(30 85 55)"
-                      />
-                    </svg>
-                  )}
-
-                  {/* Additional Line Drawing - Minimalist curves */}
-                  {index === 16 && (
-                    <svg
-                      width="100"
-                      height="70"
-                      viewBox="0 0 100 70"
-                      className="minimal-lines svg-element"
-                      style={{ willChange: 'transform' }}
-                    >
-                      <path
-                        d="M10,35 Q50,10 90,35"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        className="curve-1"
-                        opacity="0.8"
-                      />
-                      <path
-                        d="M20,50 Q50,60 80,50"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        className="curve-2"
-                        opacity="0.6"
-                      />
-                      <line
-                        x1="50"
-                        y1="20"
-                        x2="50"
-                        y2="50"
-                        stroke="#000"
-                        strokeWidth="1"
-                        className="vertical-line"
-                        opacity="0.5"
-                      />
-                    </svg>
-                  )}
-                </div>
-              )}
-            </React.Fragment>
-          ))}
+            )
+          })}
         </div>
       </div>
 
-      {/* Accessibility duplicate for screen readers */}
+      {/* Screen reader version */}
       <div className="sr-only">
-        My work lives at the intersection of human-centered design and robust, full-stack engineering.
+        <h2>Work Philosophy</h2>
+        <p>{TEXT_CONTENT}</p>
+        <p>Key terms highlighted: {HIGHLIGHTED_TERMS.join(', ')}</p>
       </div>
     </section>
   )

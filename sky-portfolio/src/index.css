@@ -70,12 +70,12 @@
 
 
 @theme {
-  /* Color palette based on your design */
-  --color-primary-black: #000000;
-  --color-primary-white: #FFFFFF;
-  --color-accent-gray: #6B7280;
-  --color-gray-light: #F5F5F5;
-  --color-gray-dark: #333333;
+  /* Dark color palette */
+  --color-primary-black: #0a0a0a;
+  --color-primary-white: #ffffff;
+  --color-accent-gray: #404040;
+  --color-gray-light: #1a1a1a;
+  --color-gray-dark: #262626;
 
   /* Typography - Updated to use PolySans */
   --font-display: "PolySans", system-ui, sans-serif;
@@ -104,14 +104,28 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
+    /* Enhanced scroll performance */
+    scroll-padding-top: 80px; /* Account for fixed navbar */
+    overflow-x: hidden;
   }
 
   body {
     margin: 0;
-    background-color: var(--color-primary-white);
-    color: var(--color-gray-dark);
+    background-color: #0a0a0a;
+    color: #ffffff;
     overflow-x: hidden;
-    cursor: auto; /* Restore default cursor */
+    /* Enhanced smooth scrolling */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent white overlay during scroll */
+    position: relative;
+    z-index: 0;
+  }
+
+  /* Prevent any pseudo-elements on body from creating overlays */
+  body::before,
+  body::after {
+    display: none !important;
   }
 
   * {
@@ -121,6 +135,33 @@
   /* Smooth transitions for specific elements only */
   a, button {
     transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Enhanced scroll performance for sections */
+  section {
+    scroll-margin-top: 80px;
+    will-change: transform;
+    contain: layout style paint;
+  }
+
+  /* Smooth momentum scrolling for webkit */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
   }
 
   /* Custom text selection color - Light Green */
@@ -424,6 +465,26 @@
   content: '\00a0'; /* Non-breaking space */
 }
 
+
+
+
+
+
+
+/* Narrative Paragraph Spacing */
+.narrative-paragraph {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+
+
+
+
+
+
+
+
 /* Hero word animation styles - optimized for 60fps performance */
 .hero-word-segment1,
 .hero-word-segment2 {
@@ -476,6 +537,107 @@
   overflow: hidden;
 }
 
+
+
+
+
+
+
+
+
+/* Enhanced scroll hint pulse animation */
+.scroll-hint-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+
+
+@keyframes scroll-flow-pulse {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.8) translateY(0);
+  }
+  25% {
+    opacity: 0.6;
+    transform: scale(1) translateY(-2px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) translateY(-4px);
+  }
+  75% {
+    opacity: 0.6;
+    transform: scale(1) translateY(-2px);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8) translateY(0);
+  }
+}
+
+/* Enhanced scroll hint bounce animation */
+.scroll-hint-bounce {
+  animation: scroll-hint-bounce 3s ease-in-out infinite;
+}
+
+@keyframes scroll-hint-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+
+
+
+
+
+
+/* Screen reader improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: #fff;
+  border: 2px solid #3B82F6;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
 .work-container {
   position: relative;
   width: 100%;
@@ -520,172 +682,39 @@
   .work-text-container {
     gap: 1rem; /* Reduced gap on mobile */
   }
+
+  /* Responsive adjustments for highlighted text on mobile */
+  .work-text-word[style*="background"] {
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 6px !important;
+    border-width: 1px !important;
+    margin: 0 0.1rem !important;
+  }
+
+  .work-text-word[style*="background"]:hover {
+    transform: translateY(-2px) scale(1.01) !important;
+  }
 }
 
-/* SVG Elements Styling */
-.svg-element-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin: 0 1rem;
+/* Tablet-specific adjustments */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .work-text-word[style*="background"] {
+    padding: 0.22rem 0.45rem !important;
+    border-radius: 7px !important;
+  }
 }
 
-.svg-element {
-  will-change: transform;
-  opacity: 0;
-  transform: scale(0.8) rotate(-10deg);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
 
-.abstract-pattern,
-.line-drawing,
-.combined-svg,
-.minimal-lines {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
 
-/* Abstract Pattern Animations */
-.rotating-group {
-  transform-origin: center;
-  animation: subtleRotate 20s linear infinite;
-}
 
-.pattern-circle {
-  transform-origin: center;
-  animation: pulseScale 4s ease-in-out infinite;
-}
 
-.pattern-rect {
-  transform-origin: center;
-  animation: counterRotate 15s linear infinite;
-}
 
-.pattern-triangle {
-  transform-origin: center;
-  animation: floatUpDown 6s ease-in-out infinite;
-}
 
-.inner-circle {
-  transform-origin: center;
-  animation: pulseOpacity 3s ease-in-out infinite;
-}
 
-/* Line Drawing Animations */
-.line-path-1,
-.line-path-2,
-.line-path-3 {
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: drawLine 3s ease-in-out infinite;
-}
 
-.line-path-2 {
-  animation-delay: 0.5s;
-}
 
-.line-path-3 {
-  animation-delay: 1s;
-}
 
-.line-dot {
-  transform-origin: center;
-  animation: dotPulse 2s ease-in-out infinite;
-}
 
-/* Combined SVG Animations */
-.flowing-line {
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300;
-  animation: flowingDraw 4s ease-in-out infinite;
-}
-
-.floating-circle-1,
-.floating-circle-2 {
-  transform-origin: center;
-  animation: floatCircle 5s ease-in-out infinite;
-}
-
-.floating-circle-2 {
-  animation-delay: 1s;
-}
-
-.intersection-rect {
-  transform-origin: center;
-  animation: rotateRect 8s linear infinite;
-}
-
-/* Minimal Lines Animations */
-.curve-1,
-.curve-2 {
-  stroke-dasharray: 150;
-  stroke-dashoffset: 150;
-  animation: drawCurve 2.5s ease-in-out infinite;
-}
-
-.curve-2 {
-  animation-delay: 0.3s;
-}
-
-.vertical-line {
-  stroke-dasharray: 30;
-  stroke-dashoffset: 30;
-  animation: drawVertical 1.5s ease-in-out infinite;
-  animation-delay: 0.8s;
-}
-
-/* Keyframe Animations */
-@keyframes subtleRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes counterRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-@keyframes pulseScale {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes floatUpDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
-@keyframes pulseOpacity {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes drawLine {
-  0% { stroke-dashoffset: 200; }
-  50% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -200; }
-}
-
-@keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.2); opacity: 1; }
-}
-
-@keyframes flowingDraw {
-  0% { stroke-dashoffset: 300; }
-  50% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -300; }
-}
-
-@keyframes floatCircle {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.1); }
-}
-
-@keyframes rotateRect {
-  from { transform: rotate(30deg); }
-  to { transform: rotate(390deg); }
-}
 
 @keyframes drawCurve {
   0% { stroke-dashoffset: 150; }
@@ -699,35 +728,43 @@
   100% { stroke-dashoffset: -30; }
 }
 
-/* Responsive SVG sizing */
-@media (max-width: 1199px) {
-  .svg-element-container {
-    margin: 0 0.5rem;
-  }
 
-  .abstract-pattern,
-  .line-drawing,
-  .combined-svg,
-  .minimal-lines {
-    transform: scale(0.8);
-  }
+
+/* Enhanced Smooth Scrolling Utilities */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
-@media (max-width: 767px) {
-  .svg-element-container {
-    margin: 0 0.25rem;
-  }
+.scroll-snap-y {
+  scroll-snap-type: y mandatory;
+}
 
-  .abstract-pattern,
-  .line-drawing,
-  .combined-svg,
-  .minimal-lines {
-    transform: scale(0.6);
-  }
+.scroll-snap-start {
+  scroll-snap-align: start;
+}
+
+.scroll-snap-center {
+  scroll-snap-align: center;
+}
+
+/* Performance optimizations for scrolling sections */
+.scroll-section {
+  will-change: transform;
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  /* Ensure no white overlay during scroll */
+  background: transparent !important;
+  z-index: auto;
 }
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
   .work-section * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -735,35 +772,56 @@
     scroll-behavior: auto !important;
   }
 
-  .svg-element {
-    opacity: 1 !important;
+  .smooth-scroll {
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-section {
+    will-change: auto !important;
     transform: none !important;
   }
 
-  .rotating-group,
-  .pattern-circle,
-  .pattern-rect,
-  .pattern-triangle,
-  .inner-circle,
-  .line-path-1,
-  .line-path-2,
-  .line-path-3,
-  .line-dot,
-  .flowing-line,
-  .floating-circle-1,
-  .floating-circle-2,
-  .intersection-rect,
-  .curve-1,
-  .curve-2,
-  .vertical-line {
-    animation: none !important;
+
+
+  /* Simplify highlighted text for reduced motion - but keep backgrounds visible */
+  .work-text-word[style*="background"] {
+    /* Keep backgrounds and colors, just remove complex effects */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: none !important;
+    /* Ensure backgrounds are still visible */
+    opacity: 1 !important;
+    visibility: visible !important;
   }
+
+  .work-text-word[style*="background"]:hover {
+    transform: none !important;
+    /* Keep basic shadow for visibility */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .work-text-word[style*="background"]:focus {
+    transform: none !important;
+    box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.5) !important;
+  }
+
+
 }
 
 /* Performance Optimizations */
 .work-section {
   contain: layout style paint;
   will-change: scroll-position;
+  /* Prevent any white overlay during scroll */
+  background: #0a0a0a !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure no pseudo-elements create white overlays */
+.work-section::before,
+.work-section::after {
+  display: none !important;
 }
 
 .work-text-container {
@@ -771,26 +829,95 @@
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
+  /* Prevent white overlay during scroll */
+  background: transparent !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* Prevent ScrollTrigger pin-spacer from creating white overlays */
+.pin-spacer,
+[data-pin-spacer],
+.gsap-pin-spacer {
+  background: transparent !important;
+  z-index: auto !important;
+}
+
+/* Tech badge hover animations */
+.tech-badge {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background-color, border-color;
+}
+
+.tech-badge:hover {
+  transform: translateY(-1px);
+}
+
+/* Simplified styles for highlighted text - remove complex GPU acceleration */
+.work-text-word[style*="background"] {
+  /* Keep it simple for maximum compatibility */
+  display: inline-block !important;
+  /* Remove any containment that might interfere */
+  contain: none !important;
+}
+
+/* Simplified styles for horizontal scroll compatibility */
+.work-text-container .work-text-word[style*="background"] {
+  /* Keep it simple */
+  transform-origin: center center;
+  /* Remove containment completely */
+  contain: none !important;
 }
 
 .work-text-word {
-  contain: layout style;
+  /* Remove containment for non-highlighted words to ensure proper rendering */
   transform: translate3d(0, 0, 0);
 }
 
-.svg-element {
-  contain: layout style paint;
-  transform: translate3d(0, 0, 0);
+
+
+/* Clean Highlighted Text Styles */
+.work-text-word[style*="background"],
+.highlighted-word {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  /* Clean rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+.work-text-word[style*="background"]:hover {
+  transform: translateY(-2px) scale(1.01);
+  /* Simple clean hover effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Smooth transition */
+  transition: all 0.3s ease;
+}
+
+/* Specific enhancements for each highlighted word type */
+.work-text-word[style*="background"][data-word-index]:hover {
+  /* Add subtle border glow on hover */
+  border-width: 2px;
+}
+
+/* Enhanced focus states for accessibility */
+.work-text-word[style*="background"]:focus {
+  outline: 3px solid #86efac;
+  outline-offset: 3px;
+  border-radius: 10px;
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 0 0 3px rgba(134, 239, 172, 0.3);
+}
+
+
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .abstract-pattern,
-  .line-drawing,
-  .combined-svg,
-  .minimal-lines {
-    filter: contrast(2) brightness(1.2);
-  }
+
 
   .work-text-content {
     font-weight: 800;
@@ -802,6 +929,37 @@
 .work-section:focus-within {
   outline: 2px solid #86efac;
   outline-offset: 4px;
+}
+
+/* Accessibility for highlighted text */
+.work-text-word[style*="background"]:focus {
+  outline: 2px solid #86efac;
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* High contrast support for highlighted text - only apply when high contrast is actually preferred */
+@media (prefers-contrast: high) {
+  .work-text-word[style*="background"] {
+    /* Keep the gradient backgrounds but enhance contrast */
+    border-width: 2px !important;
+    font-weight: 800;
+    /* Enhance existing shadows rather than replacing them */
+    filter: contrast(1.3) brightness(1.05) !important;
+  }
+
+  .work-text-word[style*="background"]:hover {
+    border-width: 3px !important;
+    filter: contrast(1.4) brightness(1.1) !important;
+  }
+}
+
+
+
+/* Ensure text remains readable in all gradient backgrounds */
+.work-text-word[style*="background"] {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
 }
 
 /* Print styles */
@@ -819,9 +977,19 @@
     flex-wrap: wrap !important;
   }
 
-  .svg-element-container {
-    display: none !important;
+  /* Simplify highlighted text for print */
+  .work-text-word[style*="background"] {
+    background: none !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
   }
+
+
 }
 
 /* Ensure backdrop blur works across browsers */
@@ -1068,70 +1236,9 @@ span[class*="line"] {
   animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
 }
 
-/* Image capsule specific styles - emoji-like inline integration */
-.image-capsule {
-  /* Perfect alignment with text top for better positioning */
-  vertical-align: text-top;
-  /* Inline display like text characters */
-  display: inline;
-  /* Transparent background - no visible background */
-  background: transparent !important;
-  /* No borders or outlines */
-  border: none !important;
-  outline: none !important;
-  /* Prevent layout shifts during loading */
-  contain: layout style paint;
-  /* Optimize for animations */
-  will-change: transform, opacity;
-  /* Ensure no line height disruption */
-  line-height: 1;
-  /* Perfect text integration */
-  font-size: inherit;
-  /* Prevent any margin collapse */
-  margin-top: 0;
-  margin-bottom: 0;
-  /* No padding interference */
-  padding: 0;
-  /* Ensure inline behavior */
-  white-space: nowrap;
-}
 
-.image-capsule img {
-  /* Prevent image dragging */
-  user-select: none;
-  -webkit-user-drag: none;
-  /* Optimize rendering */
-  image-rendering: optimizeQuality;
-  -webkit-image-rendering: optimizeQuality;
-  /* Perfect middle alignment with text - use text-top for better alignment */
-  vertical-align: text-top;
-  /* Ensure inline display */
-  display: inline;
-  /* Transparent background - preserve image transparency */
-  background: transparent !important;
-  /* No borders or styling */
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  /* No forced styling - preserve natural image appearance */
-  border-radius: 0 !important;
-  /* Natural object fit - maintain aspect ratio */
-  object-fit: contain;
-  /* Hardware acceleration for smooth performance */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
 
-/* Responsive image capsule sizing for reduced font size layout */
 @media (max-width: 640px) {
-  .image-capsule {
-    /* No margins - inline with text */
-    margin: 0;
-    /* Ensure 1em height scales with 32px font size */
-    height: 1em;
-  }
-
   .hero-text-container {
     /* Ensure proper spacing on mobile */
     line-height: 0.9;
@@ -1139,13 +1246,6 @@ span[class*="line"] {
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
-  .image-capsule {
-    /* No margins - inline with text */
-    margin: 0;
-    /* Ensure 1em height scales with 48px font size */
-    height: 1em;
-  }
-
   .hero-text-container {
     /* Optimal spacing for tablet */
     line-height: 0.9;
@@ -1153,12 +1253,6 @@ span[class*="line"] {
 }
 
 @media (min-width: 1025px) {
-  .image-capsule {
-    /* No margins - inline with text */
-    margin: 0;
-    /* Ensure 1em height scales with 64px font size */
-    height: 1em;
-  }
 
   .hero-text-container {
     /* Perfect spacing for desktop */
@@ -1310,14 +1404,125 @@ span[class*="line"] {
 
 [data-slot="wrapper"] {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
 /* Ensure navbar background is completely transparent */
 .navbar-transparent {
   background: transparent !important;
   backdrop-filter: none !important;
+  transform: translateZ(0) !important; /* Force hardware acceleration */
 }
 
 .navbar-transparent::before {
   display: none !important;
+}
+
+/* Custom navbar container for complete hide/show control */
+.navbar-container {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  z-index: 9999 !important; /* Ensure navbar is always on top */
+}
+
+/* Navbar brand positioning */
+[data-slot="brand"] {
+  flex-shrink: 0 !important;
+  margin-right: auto !important;
+}
+
+/* Navbar content right positioning */
+[data-slot="content"][data-justify="end"] {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  gap: 1.5rem !important;
+}
+
+/* Navbar items spacing */
+[data-slot="item"] {
+  margin: 0 0.5rem !important;
+}
+
+/* Mobile menu improvements */
+[data-slot="menu"] {
+  padding: 1.5rem !important;
+  border-radius: 1rem !important;
+}
+
+
+
+
+
+/* Global fix for white overlay during scroll - target specific problematic elements */
+.scroll-section::before,
+.scroll-section::after,
+.work-section::before,
+.work-section::after {
+  /* Prevent pseudo-elements from creating white overlays */
+  display: none !important;
+  background: transparent !important;
+}
+
+/* Specific fix for GSAP ScrollTrigger elements */
+.gsap-marker-scroller-start,
+.gsap-marker-scroller-end,
+.gsap-marker-start,
+.gsap-marker-end {
+  display: none !important;
+}
+
+/* Ensure all sections maintain their backgrounds during scroll */
+section {
+  position: relative;
+  z-index: auto;
+  background-clip: padding-box !important;
+}
+
+/* Ensure no white background appears during GSAP animations */
+[data-gsap] {
+  background: transparent !important;
+}
+
+/* Fix for any potential white overlay from transform operations */
+* {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+
+
+/* Ensure smooth text and image alignment */
+.hero-line-1 {
+  line-height: 1.1 !important;
+}
+
+/* Magnetic Button Styles */
+.magnetic-button {
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@media (hover: hover) {
+  .magnetic-button.magnetic-button--stroke:hover {
+    color: #000 !important;
+    text-decoration: none;
+  }
+
+  .magnetic-button.magnetic-button--stroke:hover .magnetic-button__label {
+    color: #000;
+  }
+}
+
+.magnetic-button--stroke::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 0.125rem solid currentColor;
+  border-radius: 6.25rem;
+  content: "";
+  pointer-events: none;
 }
